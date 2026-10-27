@@ -12,12 +12,13 @@ UNION ALL
 
 SELECT 
     'Событие до отклика или без ключа' AS problem_type, 
-    COUNT(*) AS rows_count
+    COUNT(*) AS rows_count,
+    STRING_AGG(c.call_id::text, ', ') AS problem_ids
 FROM calls c
 LEFT JOIN responses r ON c.response_id = r.response_id
 WHERE c.call_at < r.created_at OR c.response_id IS NULL;
+--ID проблемных звонков:700244, 700245, 700246, 700247, 700248, 700249, 700250, 700251
 
---длительность успешных звонков
 WITH valid_calls AS (
     SELECT call_duration
     FROM calls
